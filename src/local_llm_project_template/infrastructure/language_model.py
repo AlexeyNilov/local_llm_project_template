@@ -13,7 +13,7 @@ async def stream_text(prompt: str, system_prompt: str) -> AsyncIterator[str]:
         ],
         stream=True,
         reasoning_effort="none",
-        tool_choice="none"
+        tool_choice="none",
     )
 
     async for chunk in stream:
