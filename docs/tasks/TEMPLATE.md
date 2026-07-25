@@ -4,9 +4,9 @@
 
 **Owner:** Unassigned
 
-**Role guide:** [Explorer](../agent_roles/explorer.md) | [Implementer](../agent_roles/implementer.md)
+**Delivery role:** [Explorer](../agent_roles/explorer.md) | [Implementer](../agent_roles/implementer.md) | [Simplifier](../agent_roles/simplifier.md)
 
-**Agent profile:** `explorer` | `implementer`
+**Agent profile:** `explorer` | `implementer` | `simplifier`
 
 **Base commit:** commit hash
 
@@ -23,6 +23,27 @@
 ## Outcome
 
 State one observable result and why it matters.
+
+## Experiment evidence
+
+Required only for a bounded experiment.
+
+- **Evidence record:** exact path under `docs/evidence/`.
+- **Hypothesis and decision unlocked:** link or restate the record's exact
+  fields.
+- **Result handoff:** complete the record at Review, including a negative or
+  inconclusive result.
+
+## Vision alignment
+
+Required only when this task introduces or claims a reusable system boundary.
+
+- **Vision behavior made observable:**
+- **Classification:** `Disposable experiment scaffolding` | `Candidate durable system foundation`
+- **Reuse pressure:** the smallest second scenario or action contract that
+  tests the boundary, or `Not in scope — scaffolding only`.
+- **Boundary rejection signal:** evidence that stops promotion of this boundary
+  as reusable.
 
 ## Canonical context
 

@@ -1,41 +1,67 @@
 # Agent Workflow
 
-This document owns task lifecycle, delegation, context boundaries, and handoff.
-Repository-wide behavior and information routing remain in
-[AGENTS.md](../AGENTS.md).
+This document governs bounded implementation work. It does not apply to ordinary
+discussion, review, or read-only exploration. For the information map, see
+[Information Flow](information-flow.md).
 
-## Operating loop
+## Control plane
 
-```text
-planner: define outcome, route durable facts, prepare Ready work
-    -> explorer, implementer, or simplifier: execute one bounded assignment
-    -> compact evidence handoff
-    -> planner: inspect, verify, integrate, or stop
-```
+The Product Manager and [Technical Lead](agent_roles/technical_lead.md) operate
+outside the implementation loop. The Product Manager sets product direction in
+the roadmap. The Technical Lead turns an agreed outcome into the smallest
+verifiable technical path, integrates accepted work, and records only changed
+durable facts.
 
-Use the current control context while one bounded outcome remains active and its
-planning evidence is still useful. Start a fresh context after a phase change,
-long pause, or when completed work and raw logs dominate. A fresh launch brief is
-ephemeral and contains only the outcome, canonical links or IDs, current Git
-state, constraints, and done condition.
+Use a task packet only for delegated, risky, experimental, or multi-step work.
+The Technical Lead may implement a localized, verifiable change directly when a
+packet would add no value.
 
-## Status lifecycle
+## Enter the implementation loop
+
+For a packet, select one delivery role and read only its guide and the packet's
+named context.
+
+| Work | Delivery role |
+| --- | --- |
+| Bounded read-only discovery | [Explorer](agent_roles/explorer.md) |
+| Code, tests, configuration, or documentation implementation | [Implementer](agent_roles/implementer.md) |
+| Review of a qualifying packet or diff | [Simplifier](agent_roles/simplifier.md) |
+
+Use the Simplifier only when the work adds a file, dependency, abstraction,
+helper, public boundary, cross-module change, or unresolved design choice.
+
+## Make work Ready
+
+Before a packet enters delivery, the Technical Lead confirms:
+
+- one observable outcome, write scope, verification, and stop condition;
+- the relevant canonical context and any durable-information impact;
+- an experiment record and decision unlocked, if this is an experiment;
+- a second scenario or a scaffolding label, if the work claims reuse; and
+- a discovery outcome rather than implementation, if a material product or
+  technical choice remains unresolved.
+
+The [task template](tasks/TEMPLATE.md) holds the details. A roadmap outcome is a
+priority signal, not a Ready task.
+
+## Lifecycle
 
 1. **Planned:** dependencies or decisions remain unresolved.
 2. **Ready:** outcome, context, write scope, verification, and stop conditions are complete.
 3. **In progress:** one owner is executing the task.
 4. **Review:** execution and task-local verification are complete.
 5. **Blocked:** a named design or external condition prevents progress.
-6. **Done:** findings are resolved and the planner accepted the result.
+6. **Done:** findings are resolved, the Technical Lead has reconciled the
+   durable records, and accepted the result.
 
-Only the planner marks Ready or Done. An execution role may move Ready work to In
-progress, then Review or Blocked. The [task registry](tasks/STATUS.md) contains
+Only the Technical Lead marks Ready or Done. A delivery role may move Ready work
+to In progress, then Review or Blocked. The [task registry](tasks/STATUS.md) contains
 only open packets; remove Done packets after integration because Git owns history.
 
 ## Delegation
 
-- Create a packet from the [task template](tasks/TEMPLATE.md) before non-trivial
-  delegated execution.
+- Create a packet from the [task template](tasks/TEMPLATE.md) before delegated
+  execution.
 - Give each worker one role, one packet, exact context references, write scope,
   verification, and stop conditions.
 - Use at most one write-enabled worker in a shared worktree.
@@ -44,20 +70,6 @@ only open packets; remove Done packets after integration because Git owns histor
 - Workers do not commit, push, expose secrets, perform unapproved external
   mutations, or decide unresolved product or authority questions.
 - Do not delegate localized work merely to create another workflow stage.
-
-## Information-ownership gate
-
-Before Ready, the planner classifies every durable fact using the Question ->
-Owner table in [AGENTS.md](../AGENTS.md#route-every-durable-fact-by-question).
-The packet names only task-specific ownership impact and canonical references.
-Execution stops if a fact has no owner or would be duplicated across owners.
-
-## Simplifier routing
-
-Route a draft packet or implementation diff to the simplifier only when it adds a
-file, dependency, abstraction, helper, public boundary, cross-module change, or
-unresolved design choice. The simplifier removes unnecessary complexity without
-changing accepted behavior, scope, lifecycle state, or ownership.
 
 ## Handoff
 
@@ -69,5 +81,18 @@ Return:
 - assumptions, deviations, security or interface risks;
 - unresolved questions and recommended next action.
 
-Raw logs remain outside durable documents. The planner inspects the actual diff,
-resolves findings, runs final checks, and integrates only accepted work.
+Raw logs remain outside durable documents. The Technical Lead inspects the actual
+diff, resolves findings, runs final checks, and integrates only accepted work.
+
+### Completion reconciliation
+
+Before marking an experiment or delivery Done, the Technical Lead confirms:
+
+- its evidence record has its final status and result;
+- accepted behavior and verified mechanism are routed to Requirements and
+  Architecture, while unresolved problems are routed to an issue record;
+- the completed outcome is removed from the incomplete-only roadmap, and its
+  evidence record no longer links to that removed heading;
+- modified Markdown links are checked, with any pre-existing repository-wide
+  link failures recorded as issues rather than ignored; and
+- the final diff passes the repository's required verification.
