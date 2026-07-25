@@ -28,6 +28,9 @@ where = ["src"]
 include = ["local_llm_project_template*"]
 namespaces = false
 
+[tool.setuptools.package-data]
+local_llm_project_template = ["py.typed"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
